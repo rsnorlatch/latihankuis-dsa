@@ -31,6 +31,14 @@ void playlist__tampilkan_lagu(Playlist *playlist) {
   }
 }
 
+Lagu playlist__cari_lagu(Playlist *playlist, string judul) {
+  for (int i = 0; i < playlist->jumlah; i++) {
+    if (playlist->list[i].judul == judul) {
+      return playlist->list[i];
+    }
+  }
+}
+
 int main() {
   Playlist playlist;
   Lagu lagu = {.judul = "lagu 1",
@@ -41,5 +49,5 @@ int main() {
   playlist__tambah_lagu(&playlist, lagu);
   playlist__tambah_lagu(&playlist, {.judul = "lagu 2"});
 
-  playlist__tampilkan_lagu(&playlist);
+  assert(playlist__cari_lagu(&playlist, "lagu 2").judul == "lagu 2");
 }
