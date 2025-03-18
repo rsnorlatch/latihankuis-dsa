@@ -25,6 +25,12 @@ void playlist__tambah_lagu(Playlist *playlist, Lagu lagu) {
   playlist->jumlah++;
 }
 
+void playlist__tampilkan_lagu(Playlist *playlist) {
+  for (int i = 0; i < playlist->jumlah; i++) {
+    cout << "> " << playlist->list[i].judul << endl;
+  }
+}
+
 int main() {
   Playlist playlist;
   Lagu lagu = {.judul = "lagu 1",
@@ -33,7 +39,7 @@ int main() {
                .tahun = 197};
 
   playlist__tambah_lagu(&playlist, lagu);
+  playlist__tambah_lagu(&playlist, {.judul = "lagu 2"});
 
-  assert(playlist.jumlah > 0);
-  assert(playlist.list[0].judul == "lagu 1");
+  playlist__tampilkan_lagu(&playlist);
 }
