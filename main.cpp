@@ -13,6 +13,13 @@ typedef struct {
   int tahun;
 } Lagu;
 
+#define NULL_LAGU {"", "", "", 0}
+
+bool lagu__bernilai_null(Lagu lagu) {
+  return lagu.judul == "" && lagu.penyanyi == "" && lagu.genre == "" &&
+         lagu.tahun == 0;
+}
+
 // Playlist ditaruh setelah struct untuk menghilangkan warning yang muncul
 // karena memberikan default initializer kepada jumlah
 typedef struct Playlist {
@@ -37,6 +44,8 @@ Lagu playlist__cari_lagu(Playlist *playlist, string judul) {
       return playlist->list[i];
     }
   }
+
+  return NULL_LAGU;
 }
 
 int main() {
@@ -50,4 +59,5 @@ int main() {
   playlist__tambah_lagu(&playlist, {.judul = "lagu 2"});
 
   assert(playlist__cari_lagu(&playlist, "lagu 2").judul == "lagu 2");
+  assert(lagu__bernilai_null(playlist__cari_lagu(&playlist, "nggak ada")));
 }
