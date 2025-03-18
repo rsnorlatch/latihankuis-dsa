@@ -13,9 +13,11 @@ typedef struct {
   int tahun;
 } Lagu;
 
-typedef struct {
+// Playlist ditaruh setelah struct untuk menghilangkan warning yang muncul
+// karena memberikan default initializer kepada jumlah
+typedef struct Playlist {
   Lagu list[100];
-  int jumlah;
+  int jumlah = 0;
 } Playlist;
 
 void playlist__tambah_lagu(Playlist *playlist, Lagu lagu) {
@@ -24,7 +26,7 @@ void playlist__tambah_lagu(Playlist *playlist, Lagu lagu) {
 }
 
 int main() {
-  Playlist playlist = {.jumlah = 0};
+  Playlist playlist;
   Lagu lagu = {.judul = "lagu 1",
                .penyanyi = "penyanyi 1",
                .genre = "bebop",
