@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cctype>
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
@@ -145,10 +146,8 @@ void page__tambah_lagu(Playlist *playlist) {
       cin.ignore();
       cin.getline(lagu_input.judul, 100);
       cout << "Penyanyi: ";
-      cin.ignore();
       cin.getline(lagu_input.penyanyi, 100);
       cout << "Genre: ";
-      cin.ignore();
       cin.getline(lagu_input.genre, 100);
       cout << "Tahun: ";
       cin >> lagu_input.tahun;
@@ -193,36 +192,19 @@ void page__edit_lagu(Playlist *playlist) {
     }
 
     cout << "Lagu ditemukkan!" << endl;
-    cout << "edit lagu: (tekan enter bila tidak ingin mengubah)" << endl;
+    cout << "edit lagu: " << endl;
 
     cout << "Judul: " << hasil_pencarian->judul << " -> ";
-    cin.ignore();
     cin.getline(lagu_input.judul, 100);
 
-    if (strcmp(lagu_input.judul, "")) {
-      strcpy(lagu_input.judul, hasil_pencarian->judul);
-    }
-
     cout << "Penyanyi: " << hasil_pencarian->penyanyi << " -> ";
-    cin.ignore();
     cin.getline(lagu_input.penyanyi, 100);
 
-    if (strcmp(lagu_input.penyanyi, "")) {
-      strcpy(lagu_input.penyanyi, hasil_pencarian->penyanyi);
-    }
     cout << "Genre: " << hasil_pencarian->genre << " -> ";
-    cin.ignore();
     cin.getline(lagu_input.genre, 100);
 
-    if (strcmp(lagu_input.genre, "")) {
-      strcpy(lagu_input.genre, hasil_pencarian->genre);
-    }
     cout << "Tahun: " << hasil_pencarian->tahun << " -> ";
     cin >> lagu_input.tahun;
-
-    if (lagu_input.tahun == 0) {
-      lagu_input.tahun = hasil_pencarian->tahun;
-    }
 
     strcpy(hasil_pencarian->judul, lagu_input.judul);
     strcpy(hasil_pencarian->penyanyi, lagu_input.penyanyi);
@@ -244,10 +226,10 @@ void page__tampilkan_lagu(Playlist *playlist) {
 
   for (int i = 0; i < playlist->jumlah; i++) {
     cout << "---" << endl;
-    cout << "Judul: " << playlist->list[i].judul;
-    cout << "Penyanyi: " << playlist->list[i].penyanyi;
-    cout << "Genre: " << playlist->list[i].genre;
-    cout << "Tahun: " << playlist->list[i].tahun;
+    cout << "Judul: " << playlist->list[i].judul << endl;
+    cout << "Penyanyi: " << playlist->list[i].penyanyi << endl;
+    cout << "Genre: " << playlist->list[i].genre << endl;
+    cout << "Tahun: " << playlist->list[i].tahun << endl;
     cout << endl;
   }
 
@@ -283,6 +265,7 @@ void page__cari_lagu(Playlist *playlist) {
   } while (query_input == "");
 
   cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
+  getchar();
   page__main(playlist);
 }
 
