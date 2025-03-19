@@ -2,6 +2,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <string>
 
@@ -108,6 +109,7 @@ void store__delete_data(const char *store_path, Playlist *playlist) {
 
   playlist->jumlah = 0;
 
+  // geser ke nilai jumlah
   fseek(store, playlist->jumlah * sizeof(Lagu), SEEK_SET);
   fwrite(&playlist->jumlah, sizeof(int), 1, store);
 
@@ -117,27 +119,30 @@ void store__delete_data(const char *store_path, Playlist *playlist) {
 int main() {
   Playlist playlist;
 
-  /*playlist__tambah_lagu(&playlist, {*/
-  /*                                     .judul = "lagu 1",*/
-  /*                                 });*/
-  /*playlist__tambah_lagu(&playlist, {*/
-  /*                                     .judul = "lagu 2",*/
-  /*                                 });*/
-  /*playlist__tambah_lagu(&playlist, {*/
-  /*                                     .judul = "lagu 3",*/
-  /*                                 });*/
-  /**/
-  /*store__save_song_to_file("./lagu_store.dat", &playlist);*/
+  int pilihan_input;
+  string error;
 
-  store__load_song_from_file("./lagu_store.dat", &playlist);
+  do {
+    system("clear");
+    cout << "Playlist Lagu" << endl;
+    cout << setw(13) << setfill('=') << "" << endl;
+    cout << "1. Tambah Lagu" << endl;
+    cout << "2. Edit Lagu" << endl;
+    cout << "3. Tampilkan Lagu" << endl;
+    cout << "4. Cari Lagu" << endl;
+    cout << "5. Keluar" << endl;
 
-  assert(strcmp(playlist.list[0].judul, "lagu 1") == 0);
-  assert(strcmp(playlist.list[1].judul, "lagu 2") == 0);
-  assert(strcmp(playlist.list[2].judul, "lagu 3") == 0);
-  assert(playlist.jumlah == 3);
+    cout << error;
 
-  store__delete_data("./lagu_store.dat", &playlist);
-  store__load_song_from_file("./lagu_store.dat", &playlist);
+    cout << "Pilih Menu: ";
+    cin >> pilihan_input;
 
-  assert(playlist.jumlah != 3);
+    if (pilihan_input > 5 || pilihan_input < 0) {
+      error = "\nPilihan menu tidak valid!\n";
+      pilihan_input = 0;
+    } else if (pilihan_input == 0) {
+      error = "\nMasukkan pilihan menu!\n";
+      pilihan_input = 0;
+    }
+  } while (pilihan_input == 0);
 }
