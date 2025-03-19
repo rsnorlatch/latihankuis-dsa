@@ -158,10 +158,13 @@ void page__tambah_lagu(Playlist *playlist) {
     }
   } while (jumlah_input == 0 && lagu__bernilai_null(lagu_input));
 
-  store__save_song_to_file("./lagu_store.dat", playlist);
+  /*store__save_song_to_file("./lagu_store.dat", playlist);*/
 
   cout << "berhasil ditulis ke file!" << endl;
   cout << "tekan tombol sembarang untuk melanjutkan ke halaman utama" << endl;
+
+  getchar();
+  page__main(playlist);
 }
 
 void page__edit_lagu(Playlist *playlist) {
@@ -227,10 +230,13 @@ void page__edit_lagu(Playlist *playlist) {
     hasil_pencarian->tahun = lagu_input.tahun;
   } while (query_input == "" && lagu__bernilai_null(lagu_input));
 
-  store__save_song_to_file("./lagu_store.dat", playlist);
+  /*store__save_song_to_file("./lagu_store.dat", playlist);*/
 
   cout << "berhasil ditulis ke file!" << endl;
   cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
+
+  getchar();
+  page__main(playlist);
 }
 
 void page__tampilkan_lagu(Playlist *playlist) {
@@ -246,6 +252,8 @@ void page__tampilkan_lagu(Playlist *playlist) {
   }
 
   cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
+  getchar();
+  page__main(playlist);
 }
 
 void page__cari_lagu(Playlist *playlist) {
@@ -275,6 +283,7 @@ void page__cari_lagu(Playlist *playlist) {
   } while (query_input == "");
 
   cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
+  page__main(playlist);
 }
 
 void page__main(Playlist *playlist) {
@@ -289,8 +298,7 @@ void page__main(Playlist *playlist) {
     cout << "2. Edit Lagu" << endl;
     cout << "3. Tampilkan Lagu" << endl;
     cout << "4. Cari Lagu" << endl;
-    cout << "5. Hapus Data" << endl;
-    cout << "6. Keluar" << endl;
+    cout << "5. Keluar" << endl;
 
     cout << error;
 
