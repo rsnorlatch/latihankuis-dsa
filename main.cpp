@@ -2,8 +2,10 @@
 #include <cstdio>
 #include <cstring>
 #include <iostream>
+#include <string>
 
 #pragma disable(warning : 4995)
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 
 using namespace std;
 
@@ -47,33 +49,54 @@ Lagu playlist__cari_lagu(Playlist *playlist, string judul) {
   return NULL_LAGU;
 }
 
+void store__save_song_to_file(const char *store_path, Playlist *playlist) {
+  int size = sizeof(playlist->list) / sizeof(playlist->list[0]);
+
+  FILE *store = fopen(store_path, "wb");
+
+  if (store == NULL) {
+    perror("there's a problem with writing to a file");
+    return;
+  }
+
+  fwrite(&playlist->list, sizeof(Playlist), size, store);
+  fwrite(&playlist->jumlah, sizeof(int), 1, store);
+  fclose(store);
+}
+
+void store__load_song_from_file(const char *store_path, Playlist *playlist) {
+  int size = sizeof(playlist->list) / sizeof(playlist->list[0]);
+
+  FILE *store = fopen(store_path, "rb");
+
+  if (store == NULL) {
+    perror("there's a problem with writing to a file");
+    return;
+  }
+
+  fread(playlist->list, sizeof(Playlist), size, store);
+  fread(&playlist->jumlah, sizeof(int), 1, store);
+
+  fclose(store);
+}
+
 int main() {
-  Lagu lagu1 = {
-      .judul = "lagu 1",
-      .penyanyi = "penyanyi 1",
-      .genre = "genre 1",
-      .tahun = 1987,
-  };
+  Playlist playlist;
 
-  FILE *lagu_store = fopen("./lagu_store.dat", "wb");
-  if (lagu_store == NULL) {
-    cout << "there is a problem with writing to a file" << endl;
-    return 1;
-  }
+  /*playlist__tambah_lagu(&playlist, {*/
+  /*                                     .judul = "lagu 1",*/
+  /*                                 });*/
+  /*playlist__tambah_lagu(&playlist, {*/
+  /*                                     .judul = "lagu 2",*/
+  /*                                 });*/
+  /*playlist__tambah_lagu(&playlist, {*/
+  /*                                     .judul = "lagu 3",*/
+  /*                                 });*/
+  /**/
+  /*store__save_song_to_file("./lagu_store.dat", &playlist);*/
 
-  fwrite(&lagu1, sizeof(Lagu), 1, lagu_store);
-  fclose(lagu_store);
+  store__load_song_from_file("./lagu_store.dat", &playlist);
 
-  Lagu lagu2;
-  FILE *lagu_read = fopen("./lagu_store.dat", "rb");
-  if (lagu_read == NULL) {
-    cout << "there's a problem with reading to a file" << endl;
-    return 1;
-  }
-
-  fread(&lagu2, sizeof(Lagu), 1, lagu_read);
-  fclose(lagu_read);
-
-  assert(!lagu__bernilai_null(lagu2));
-  assert(strcmp(lagu2.judul, "lagu 1") == 0);
+  assert(strcmp(playlist.list[0].judul, "lagu 1"));
+  assert(playlist.jumlah == 3);
 }
