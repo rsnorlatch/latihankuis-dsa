@@ -1,27 +1,26 @@
 #include <cassert>
+#include <cstdio>
+#include <cstring>
 #include <iostream>
-#include <string>
 
 #pragma disable(warning : 4995)
 
 using namespace std;
 
 typedef struct {
-  string judul;
-  string penyanyi;
-  string genre;
+  char judul[100];
+  char penyanyi[100];
+  char genre[100];
   int tahun;
 } Lagu;
 
 #define NULL_LAGU {"", "", "", 0}
 
 bool lagu__bernilai_null(Lagu lagu) {
-  return lagu.judul == "" && lagu.penyanyi == "" && lagu.genre == "" &&
-         lagu.tahun == 0;
+  return strcmp(lagu.judul, "") && strcmp(lagu.penyanyi, "") &&
+         strcmp(lagu.genre, "") && lagu.tahun == 0;
 }
 
-// Playlist ditaruh setelah struct untuk menghilangkan warning yang muncul
-// karena memberikan default initializer kepada jumlah
 typedef struct Playlist {
   Lagu list[100];
   int jumlah = 0;
@@ -49,15 +48,32 @@ Lagu playlist__cari_lagu(Playlist *playlist, string judul) {
 }
 
 int main() {
-  Playlist playlist;
-  Lagu lagu = {.judul = "lagu 1",
-               .penyanyi = "penyanyi 1",
-               .genre = "bebop",
-               .tahun = 197};
+  Lagu lagu1 = {
+      .judul = "lagu 1",
+      .penyanyi = "penyanyi 1",
+      .genre = "genre 1",
+      .tahun = 1987,
+  };
 
-  playlist__tambah_lagu(&playlist, lagu);
-  playlist__tambah_lagu(&playlist, {.judul = "lagu 2"});
+  FILE *lagu_store = fopen("./lagu_store.dat", "wb");
+  if (lagu_store == NULL) {
+    cout << "there is a problem with writing to a file" << endl;
+    return 1;
+  }
 
-  assert(playlist__cari_lagu(&playlist, "lagu 2").judul == "lagu 2");
-  assert(lagu__bernilai_null(playlist__cari_lagu(&playlist, "nggak ada")));
+  fwrite(&lagu1, sizeof(Lagu), 1, lagu_store);
+  fclose(lagu_store);
+
+  Lagu lagu2;
+  FILE *lagu_read = fopen("./lagu_store.dat", "rb");
+  if (lagu_read == NULL) {
+    cout << "there's a problem with reading to a file" << endl;
+    return 1;
+  }
+
+  fread(&lagu2, sizeof(Lagu), 1, lagu_read);
+  fclose(lagu_read);
+
+  assert(!lagu__bernilai_null(lagu2));
+  assert(strcmp(lagu2.judul, "lagu 1") == 0);
 }

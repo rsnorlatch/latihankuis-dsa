@@ -1,12 +1,11 @@
 CXX = clang++
-CXX_FLAGS = -g -std=c++17 -fsanitize=address
+CXX_FLAGS = -g -std=c++17 
 
 BUILD_DIR = ./build
 PLIST_DIR = ./plist
 
 SOURCE = main.cpp
 TARGET = ${BUILD_DIR}/main.exe
-
 
 
 ${TARGET}: ${SOURCE}| ${BUILD_DIR} ${PLIST_DIR}
