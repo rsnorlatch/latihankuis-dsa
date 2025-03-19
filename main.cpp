@@ -4,6 +4,7 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+#include <string.h>
 #include <string>
 
 #pragma disable(warning : 4995)
@@ -41,14 +42,14 @@ void playlist__tampilkan_lagu(Playlist *playlist) {
   }
 }
 
-Lagu playlist__cari_lagu(Playlist *playlist, string judul) {
+Lagu *playlist__cari_lagu(Playlist *playlist, string judul) {
   for (int i = 0; i < playlist->jumlah; i++) {
     if (playlist->list[i].judul == judul) {
-      return playlist->list[i];
+      return &playlist->list[i];
     }
   }
 
-  return NULL_LAGU;
+  return nullptr;
 }
 
 // menggunakkan algoritma shellsort
@@ -139,11 +140,14 @@ void page__tambah_lagu(Playlist *playlist) {
     for (int i = 0; i < jumlah_input; i++) {
       cout << "----" << endl;
       cout << "Judul: ";
-      cin >> lagu_input.judul;
+      cin.ignore();
+      cin.getline(lagu_input.judul, 100);
       cout << "Penyanyi: ";
-      cin >> lagu_input.penyanyi;
+      cin.ignore();
+      cin.getline(lagu_input.penyanyi, 100);
       cout << "Genre: ";
-      cin >> lagu_input.genre;
+      cin.ignore();
+      cin.getline(lagu_input.genre, 100);
       cout << "Tahun: ";
       cin >> lagu_input.tahun;
       cout << endl;
@@ -156,6 +160,75 @@ void page__tambah_lagu(Playlist *playlist) {
 
   cout << "berhasil ditulis ke file!" << endl;
   cout << "tekan tombol sembarang untuk melanjutkan ke halaman utama" << endl;
+}
+
+void page__edit_lagu(Playlist *playlist) {
+  string query_input;
+  Lagu lagu_input;
+  string error;
+
+  do {
+    system("clear");
+    cout << error;
+    cout << "Masukkan judul lagu yang ingin diedit: ";
+    cin.ignore();
+    getline(cin, query_input);
+
+    if (query_input == "") {
+      error = "\nTolong masukkan query!!\n";
+      continue;
+    }
+
+    error = "";
+
+    Lagu *hasil_pencarian = playlist__cari_lagu(playlist, query_input);
+    if (!hasil_pencarian) {
+      error = "\nLagu dengan judul " + query_input + " tidak ditemukkan!\n";
+      continue;
+    }
+
+    cout << "Lagu ditemukkan!" << endl;
+    cout << "edit lagu: (tekan enter bila tidak ingin mengubah)" << endl;
+
+    cout << "Judul: " << hasil_pencarian->judul << " -> ";
+    cin.ignore();
+    cin.getline(lagu_input.judul, 100);
+
+    if (strcmp(lagu_input.judul, "")) {
+      strcpy(lagu_input.judul, hasil_pencarian->judul);
+    }
+
+    cout << "Penyanyi: " << hasil_pencarian->penyanyi << " -> ";
+    cin.ignore();
+    cin.getline(lagu_input.penyanyi, 100);
+
+    if (strcmp(lagu_input.penyanyi, "")) {
+      strcpy(lagu_input.penyanyi, hasil_pencarian->penyanyi);
+    }
+    cout << "Genre: " << hasil_pencarian->genre << " -> ";
+    cin.ignore();
+    cin.getline(lagu_input.genre, 100);
+
+    if (strcmp(lagu_input.genre, "")) {
+      strcpy(lagu_input.genre, hasil_pencarian->genre);
+    }
+    cout << "Tahun: " << hasil_pencarian->tahun << " -> ";
+    cin >> lagu_input.tahun;
+
+    if (lagu_input.tahun == 0) {
+      lagu_input.tahun = hasil_pencarian->tahun;
+    }
+
+    strcpy(hasil_pencarian->judul, lagu_input.judul);
+    strcpy(hasil_pencarian->penyanyi, lagu_input.penyanyi);
+    strcpy(hasil_pencarian->genre, lagu_input.genre);
+    hasil_pencarian->tahun = lagu_input.tahun;
+  } while (query_input == "" && lagu__bernilai_null(lagu_input));
+
+  store__save_song_to_file("./lagu_store.dat", playlist);
+
+  cout << "berhasil ditulis ke file!" << endl;
+  cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
 }
 
 int main() {
@@ -196,6 +269,7 @@ int main() {
     page__tambah_lagu(&playlist);
     break;
   case 2:
+    page__edit_lagu(&playlist);
     break;
   case 3:
     break;
