@@ -157,7 +157,7 @@ void page__tambah_lagu(Playlist *playlist) {
     }
   } while (jumlah_input == 0 && lagu__bernilai_null(lagu_input));
 
-  /*store__save_song_to_file("./lagu_store.dat", playlist);*/
+  store__save_song_to_file("./lagu_store.dat", playlist);
 
   cout << "berhasil ditulis ke file!" << endl;
   cout << "tekan tombol sembarang untuk melanjutkan ke halaman utama" << endl;
@@ -212,7 +212,7 @@ void page__edit_lagu(Playlist *playlist) {
     hasil_pencarian->tahun = lagu_input.tahun;
   } while (query_input == "" && lagu__bernilai_null(lagu_input));
 
-  /*store__save_song_to_file("./lagu_store.dat", playlist);*/
+  store__save_song_to_file("./lagu_store.dat", playlist);
 
   cout << "berhasil ditulis ke file!" << endl;
   cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
@@ -324,6 +324,8 @@ void page__main(Playlist *playlist) {
 
 int main() {
   Playlist playlist;
+
+  store__load_song_from_file("./lagu_store.dat", &playlist);
 
   page__main(&playlist);
 }
