@@ -117,6 +117,8 @@ void store__delete_data(const char *store_path, Playlist *playlist) {
   fclose(store);
 }
 
+void page__main(Playlist *playlist);
+
 void page__tambah_lagu(Playlist *playlist) {
   int jumlah_input;
   Lagu lagu_input;
@@ -275,9 +277,7 @@ void page__cari_lagu(Playlist *playlist) {
   cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
 }
 
-int main() {
-  Playlist playlist;
-
+void page__main(Playlist *playlist) {
   int pilihan_input;
   string error;
 
@@ -310,16 +310,16 @@ int main() {
 
   switch (pilihan_input) {
   case 1:
-    page__tambah_lagu(&playlist);
+    page__tambah_lagu(playlist);
     break;
   case 2:
-    page__edit_lagu(&playlist);
+    page__edit_lagu(playlist);
     break;
   case 3:
-    page__tampilkan_lagu(&playlist);
+    page__tampilkan_lagu(playlist);
     break;
   case 4:
-    page__cari_lagu(&playlist);
+    page__cari_lagu(playlist);
     break;
   case 5:
     cout << "Terima kasih telah menggunakkan layanan kami! :)" << endl;
@@ -329,4 +329,10 @@ int main() {
     // unreachable
     break;
   }
+}
+
+int main() {
+  Playlist playlist;
+
+  page__main(&playlist);
 }
