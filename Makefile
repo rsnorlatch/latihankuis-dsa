@@ -1,5 +1,5 @@
 CXX = clang++
-CXX_FLAGS = -g -std=c++17
+CXX_FLAGS = -g -std=c++17 -fsanitize=address
 
 BUILD_DIR = ./build
 PLIST_DIR = ./plist
