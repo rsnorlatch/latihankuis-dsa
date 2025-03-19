@@ -231,6 +231,21 @@ void page__edit_lagu(Playlist *playlist) {
   cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
 }
 
+void page__tampilkan_lagu(Playlist *playlist) {
+  system("clear");
+
+  for (int i = 0; i < playlist->jumlah; i++) {
+    cout << "---" << endl;
+    cout << "Judul: " << playlist->list[i].judul;
+    cout << "Penyanyi: " << playlist->list[i].penyanyi;
+    cout << "Genre: " << playlist->list[i].genre;
+    cout << "Tahun: " << playlist->list[i].tahun;
+    cout << endl;
+  }
+
+  cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
+}
+
 int main() {
   Playlist playlist;
 
@@ -272,6 +287,7 @@ int main() {
     page__edit_lagu(&playlist);
     break;
   case 3:
+    page__tampilkan_lagu(&playlist);
     break;
   case 4:
     break;
