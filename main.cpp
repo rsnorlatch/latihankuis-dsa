@@ -50,6 +50,23 @@ Lagu playlist__cari_lagu(Playlist *playlist, string judul) {
   return NULL_LAGU;
 }
 
+// menggunakkan algoritma shellsort
+void playlist__sort_lagu(Playlist *playlist) {
+  for (int gap = playlist->jumlah / 2; gap > 0; gap /= 2) {
+    for (int i = gap; i < playlist->jumlah; i++) {
+      Lagu temp = playlist->list[i];
+
+      int j;
+      for (j = i; j >= gap && playlist->list[j - gap].judul > temp.judul;
+           j -= gap) {
+        playlist->list[j] = playlist->list[j - gap];
+      }
+
+      playlist->list[j] = temp;
+    }
+  }
+}
+
 void store__save_song_to_file(const char *store_path, Playlist *playlist) {
   int size = sizeof(playlist->list) / sizeof(playlist->list[0]);
 
