@@ -246,6 +246,35 @@ void page__tampilkan_lagu(Playlist *playlist) {
   cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
 }
 
+void page__cari_lagu(Playlist *playlist) {
+  string query_input;
+  string error;
+
+  do {
+    system("clear");
+
+    cout << error;
+    cout << "Masukkan judul lagu yang ingin anda cari: ";
+    cin.ignore();
+    getline(cin, query_input);
+
+    Lagu *hasil_pencarian = playlist__cari_lagu(playlist, query_input);
+    if (!hasil_pencarian) {
+      error = "\nLagu dengan judul " + query_input + " tidak ditemukkan!\n";
+      continue;
+    }
+
+    cout << "Lagu ditemukkan!" << endl;
+
+    cout << "Judul: " << hasil_pencarian->judul << endl;
+    cout << "Penyanyi: " << hasil_pencarian->penyanyi << endl;
+    cout << "Genre: " << hasil_pencarian->genre << endl;
+    cout << "Tahun: " << hasil_pencarian->tahun << endl;
+  } while (query_input == "");
+
+  cout << "Tekan tombol sembarang untuk kembali ke halaman awal!" << endl;
+}
+
 int main() {
   Playlist playlist;
 
@@ -290,6 +319,7 @@ int main() {
     page__tampilkan_lagu(&playlist);
     break;
   case 4:
+    page__cari_lagu(&playlist);
     break;
   case 5:
     break;
