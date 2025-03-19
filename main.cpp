@@ -322,10 +322,11 @@ int main() {
     page__cari_lagu(&playlist);
     break;
   case 5:
-    break;
-  case 6:
+    cout << "Terima kasih telah menggunakkan layanan kami! :)" << endl;
+    exit(0);
     break;
   default:
+    // unreachable
     break;
   }
 }
