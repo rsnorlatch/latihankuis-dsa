@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstddef>
 #include <cstdio>
 #include <cstring>
 #include <iostream>
@@ -59,7 +60,7 @@ void store__save_song_to_file(const char *store_path, Playlist *playlist) {
     return;
   }
 
-  fwrite(&playlist->list, sizeof(Lagu), size, store);
+  fwrite(playlist->list, sizeof(Lagu), size, store);
   fwrite(&playlist->jumlah, sizeof(int), 1, store);
 
   fclose(store);
@@ -81,6 +82,21 @@ void store__load_song_from_file(const char *store_path, Playlist *playlist) {
   fclose(store);
 }
 
+void store__delete_data(const char *store_path, Playlist *playlist) {
+  FILE *store = fopen(store_path, "wb");
+  if (store == NULL) {
+    perror("there's a problem with deleting file data");
+    return;
+  }
+
+  playlist->jumlah = 0;
+
+  fseek(store, playlist->jumlah * sizeof(Lagu), SEEK_SET);
+  fwrite(&playlist->jumlah, sizeof(int), 1, store);
+
+  fclose(store);
+}
+
 int main() {
   Playlist playlist;
 
@@ -95,11 +111,16 @@ int main() {
   /*                                 });*/
   /**/
   /*store__save_song_to_file("./lagu_store.dat", &playlist);*/
-  /**/
+
   store__load_song_from_file("./lagu_store.dat", &playlist);
 
   assert(strcmp(playlist.list[0].judul, "lagu 1") == 0);
   assert(strcmp(playlist.list[1].judul, "lagu 2") == 0);
   assert(strcmp(playlist.list[2].judul, "lagu 3") == 0);
   assert(playlist.jumlah == 3);
+
+  store__delete_data("./lagu_store.dat", &playlist);
+  store__load_song_from_file("./lagu_store.dat", &playlist);
+
+  assert(playlist.jumlah != 3);
 }
