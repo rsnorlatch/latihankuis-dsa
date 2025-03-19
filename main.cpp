@@ -116,6 +116,48 @@ void store__delete_data(const char *store_path, Playlist *playlist) {
   fclose(store);
 }
 
+void page__tambah_lagu(Playlist *playlist) {
+  int jumlah_input;
+  Lagu lagu_input;
+  string error;
+
+  do {
+    system("clear");
+    cout << error;
+    cout << "Masukkan jumlah lagu yang ingin dimasukkan: ";
+    cin >> jumlah_input;
+
+    if (jumlah_input == 0) {
+      error = "\n tolong masukkan jumlah lagu > 1!";
+      continue;
+    }
+
+    error = "";
+
+    cout << endl;
+
+    for (int i = 0; i < jumlah_input; i++) {
+      cout << "----" << endl;
+      cout << "Judul: ";
+      cin >> lagu_input.judul;
+      cout << "Penyanyi: ";
+      cin >> lagu_input.penyanyi;
+      cout << "Genre: ";
+      cin >> lagu_input.genre;
+      cout << "Tahun: ";
+      cin >> lagu_input.tahun;
+      cout << endl;
+
+      playlist__tambah_lagu(playlist, lagu_input);
+    }
+  } while (jumlah_input == 0 && lagu__bernilai_null(lagu_input));
+
+  store__save_song_to_file("./lagu_store.dat", playlist);
+
+  cout << "berhasil ditulis ke file!" << endl;
+  cout << "tekan tombol sembarang untuk melanjutkan ke halaman utama" << endl;
+}
+
 int main() {
   Playlist playlist;
 
@@ -130,7 +172,8 @@ int main() {
     cout << "2. Edit Lagu" << endl;
     cout << "3. Tampilkan Lagu" << endl;
     cout << "4. Cari Lagu" << endl;
-    cout << "5. Keluar" << endl;
+    cout << "5. Hapus Data" << endl;
+    cout << "6. Keluar" << endl;
 
     cout << error;
 
@@ -145,4 +188,24 @@ int main() {
       pilihan_input = 0;
     }
   } while (pilihan_input == 0);
+
+  error = "";
+
+  switch (pilihan_input) {
+  case 1:
+    page__tambah_lagu(&playlist);
+    break;
+  case 2:
+    break;
+  case 3:
+    break;
+  case 4:
+    break;
+  case 5:
+    break;
+  case 6:
+    break;
+  default:
+    break;
+  }
 }
